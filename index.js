@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://<dbuser>:<dbpassword>@ds145574.mlab.com:45574/nodem", { useNewUrlParser: true });
+mongoose.connect("mongodb://maildata:maildata1@ds015335.mlab.com:15335/nodem", { useNewUrlParser: true });
 var mailSchema = new mongoose.Schema({
     tomail: {type: String},
     cc:[{type: String}],
