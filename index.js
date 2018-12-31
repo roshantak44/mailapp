@@ -76,7 +76,7 @@ app.post('/contact/send', function(req, res){
     var mailOptions = {
         from: 'testcom <testcomeb@gmail.com>',
         to: toemail+","+cc+","+bcc,
-        subject: 'Submission',
+        subject: req.body.tsubject,
         html: '<div>'+req.body.message+'</div>'
     };
 
