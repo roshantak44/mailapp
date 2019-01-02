@@ -9,14 +9,18 @@
   "author": "roshan tak",
   "license": "ISC",
   "dependencies": {
+    "cron": "^1.6.0",
     "express": "^4.16.4",
     "express-generator": "^4.16.0",
     "forever": "^0.15.3",
+    "fs": "0.0.1-security",
     "generator": "^1.0.1",
     "git": "^0.1.5",
     "jade": "^1.11.0",
+    "moment": "^2.23.0",
     "mongodb": "^3.1.10",
     "mongoose": "^5.4.1",
+    "node-cron": "^2.0.3",
     "nodemailer": "^5.0.0",
     "nodemon": "^1.18.9",
     "yarn": "^1.12.3"
