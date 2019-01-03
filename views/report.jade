@@ -25,6 +25,7 @@ block content
     tbody
       each maildata, i in maildatas
         tr
+         td= maildata.date
          td= maildata.tomail
          td= maildata.cc
          td= maildata.bcc

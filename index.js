@@ -34,9 +34,10 @@ var mailSchema = new mongoose.Schema({
     message: { type: String }
 });
 
-var maildata = mongoose.model("maildata", mailSchema, 'maildatainfo');
+var maildata = mongoose.model("maildata", mailSchema);
 
 app.get('/', function(req, res){
+    
     res.render('index',{title: 'Exambazaar'});
 });
 
@@ -47,67 +48,35 @@ app.get('/about', function(req, res){
 app.get('/contact', function(req, res){
     res.render('contact');
 });
-
 app.get('/report', function(req, res){
+    console.log("Print 2");
+
+
     maildata.find({}, function(err, docs){
 		if(err) res.json(err);
-		else    res.render('report', {maildatas: docs});
+        else    res.render('report', {maildatas: docs});
+    
+    });
+   
+
+});
+/* app.get('*', function(req, res){
+    console.log("Print 1");
+    res.send(null);
+
+    maildata.find({}, function(err, docs){
+		if(err) res.json(err);
+        else    res.render('report', {maildatas: docs});
     res.render('report');
-});
-});
-
-
-app.post('/contact/send', function(req, res){ 
-    console.log('schedule time is here'+ JSON.stringify(req.body));
-    var myData = new maildata(req.body);
-    myData.save()
-    .then(item => {
-    res.redirect('/');
-    })
-    .catch(err => {
-    res.status(400).send("unable to save to database");
+    console.log('date found'); 
     });
-	
-	var CronJob = require('cron').CronJob;
-    new CronJob('*/30 * * * *', function(err, res) {
-    console.log('You will see this message in every 30 minute');
-    }, null, true, 'America/Los_Angeles')
-
-
-    var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'testcomeb@gmail.com',
-        pass: 'testcom231834'   //enter the password associated with user mail in signle inverted commas 
-      }
-    });
-
-    var toemail = req.body.tomail;
-    var cc = req.body.cc;
-    var bcc = req.body.bcc;
-
-    var mailOptions = {
-        from: 'testcom <testcomeb@gmail.com>',
-        to: toemail+","+cc+","+bcc,
-        subject: req.body.tsubject,
-        html: '<div>'+req.body.message+'</div>'
-    };
     
 
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            console.log(error);
-            res.redirect('/');
-        }
-        else{
-            console.log('Message Sent: '+info.response);
-            res.redirect('/');
-        }
-    });
-});
+}); */
 
 
-app.post('/report', function(req, res){
+
+/* app.post('/report', function(req, res){
 	new maildata({
 		_id    : req.body.toemail,
 		tomail: req.body.tomail,
@@ -122,7 +91,62 @@ app.post('/report', function(req, res){
 		if(err) res.json(err);
 		else    res.redirect('/report');
 	});
+}); */
+app.post('/contact/send', function(req, res){ 
+    //send email using nodemailer
+    var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'testcomeb@gmail.com',
+        pass: 'testcom231834'   //enter the password associated with user mail in signle inverted commas 
+        }
+    });
+
+    var toemail = req.body.tomail;
+    var cc = req.body.cc;
+    var bcc = req.body.bcc;
+
+    var mailOptions = {
+        from: 'testcom <testcomeb@gmail.com>',
+        to: toemail+","+cc+","+bcc,
+        subject: req.body.tsubject,
+        html: '<div>'+req.body.message+'</div>'
+    };
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+            res.send(null);
+        }
+        else{
+            console.log('Message Sent: '+info.response);
+            
+            //save email into db
+            var myData = new maildata(req.body);
+
+            console.log(myData);
+
+            myData.save()
+            .then(item => {
+            res.redirect('/');
+            })
+            .catch(err => {
+            res.status(400).send("unable to save to database");
+            });
+
+        }
+    });
+    
+    
+	
+	// var CronJob = require('cron').CronJob;
+    // new CronJob('*/30 * * * *', function(err, res) {
+    // console.log('You will see this message in every 30 minute');
+    // }, null, true, 'America/Los_Angeles')
+
+    
 });
+
+
 
 
 app.listen(port, function(){
