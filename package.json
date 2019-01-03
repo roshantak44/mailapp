@@ -24,6 +24,7 @@
     "nodemailer": "^5.0.0",
     "nodemon": "^1.18.9",
     "opencollective-postinstall": "^2.0.1",
+    "postinstall": "^0.4.2",
     "yarn": "^1.12.3"
   }
 }
